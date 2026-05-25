@@ -9,7 +9,7 @@ import java.util.Map;
 @Getter
 @Service
 public class ProxyService {
-    private Map<String, String> cache = new HashMap<String, String>();
+    private final Map<String, String> cache = new HashMap<String, String>();
 
     public void cache(String url, String response) {
         cache.put(url, response);
