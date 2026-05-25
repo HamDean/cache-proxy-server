@@ -1,3 +1,7 @@
 spring:
   application:
     name: caching-proxy-server
+server:
+  port: ${port:8080}
+proxy:
+  origin: ${origin:https://jsonplaceholder.typicode.com}
