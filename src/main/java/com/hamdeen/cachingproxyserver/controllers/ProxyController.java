@@ -1,5 +1,6 @@
 package com.hamdeen.cachingproxyserver.controllers;
 
+import com.hamdeen.cachingproxyserver.enums.CacheHeader;
 import com.hamdeen.cachingproxyserver.services.ProxyService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
@@ -21,7 +22,10 @@ public class ProxyController {
             @RequestParam(name = "url", required = true) String url
     ) {
         if (proxyService.getCache().containsKey(url)) {
-            return ResponseEntity.ok(proxyService.getCache().get(url));
+            return ResponseEntity
+                    .ok()
+                    .header("X-Cache", String.valueOf(CacheHeader.HIT))
+                    .body(proxyService.getCache().get(url));
         }
 
         var restClient = RestClient.create();
@@ -33,6 +37,9 @@ public class ProxyController {
 
         proxyService.cache(url, response);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity
+                .ok()
+                .header("X-Cache", String.valueOf(CacheHeader.MISS))
+                .body(response);
     }
 }
