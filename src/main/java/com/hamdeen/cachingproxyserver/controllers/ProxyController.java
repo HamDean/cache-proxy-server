@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 
@@ -16,15 +17,21 @@ public class ProxyController {
     private final ProxyService proxyService;
 
     @GetMapping
-    public ResponseEntity<?> getResource() {
+    public ResponseEntity<String> getResource(
+            @RequestParam(name = "url", required = true) String url
+    ) {
+        if (proxyService.getCache().containsKey(url)) {
+            return ResponseEntity.ok(proxyService.getCache().get(url));
+        }
+
         var restClient = RestClient.create();
         var response = restClient.get()
-                .uri("https://jsonplaceholder.typicode.com/posts/1")
+                .uri(url)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(String.class);
 
-        proxyService.cache("https://jsonplaceholder.typicode.com/posts/1", response);
+        proxyService.cache(url, response);
 
         return ResponseEntity.ok(response);
     }
