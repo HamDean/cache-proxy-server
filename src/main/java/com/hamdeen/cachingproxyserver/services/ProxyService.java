@@ -2,7 +2,6 @@ package com.hamdeen.cachingproxyserver.services;
 
 import com.hamdeen.cachingproxyserver.dtos.CacheResponse;
 import com.hamdeen.cachingproxyserver.enums.CacheHeader;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,6 @@ import org.springframework.web.client.RestClient;
 import java.util.HashMap;
 import java.util.Map;
 
-@Getter
 @Service
 public class ProxyService {
     @Value("${proxy.origin}")
@@ -22,8 +20,8 @@ public class ProxyService {
     public CacheResponse fetch(String path) {
         var fullPath = origin + path;
 
-        if (getCache().containsKey(fullPath)) {
-            return new CacheResponse(getCache().get(fullPath), CacheHeader.HIT.toString());
+        if (cache.containsKey(fullPath)) {
+            return new CacheResponse(cache.get(fullPath), CacheHeader.HIT.toString());
         }
 
         var restClient = RestClient.create();
