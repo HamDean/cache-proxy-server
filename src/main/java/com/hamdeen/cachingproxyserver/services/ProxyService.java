@@ -39,4 +39,8 @@ public class ProxyService {
     public void cache(String url, String response) {
         cache.put(url, response);
     }
+
+    public void clearCache() {
+        cache.clear();
+    }
 }
