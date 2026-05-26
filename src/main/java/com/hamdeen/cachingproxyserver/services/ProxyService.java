@@ -17,6 +17,9 @@ public class ProxyService {
     @Value("${proxy.origin}")
     private String origin;
 
+    @Value("${server.cache-ttl}")
+    private Integer ttl;
+
     private final Map<String, CacheEntry> cache = new ConcurrentHashMap<>();
 
     public CacheResponse fetch(String path) {
@@ -37,7 +40,7 @@ public class ProxyService {
                 .retrieve()
                 .body(String.class);
 
-        var expiresAt = Instant.now().plusSeconds(120);
+        var expiresAt = Instant.now().plusSeconds(ttl);
         cache(fullPath, new CacheEntry(response, expiresAt));
 
         return new CacheResponse(response, CacheHeader.MISS.toString());
