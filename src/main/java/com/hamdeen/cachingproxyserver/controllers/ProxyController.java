@@ -4,6 +4,7 @@ import com.hamdeen.cachingproxyserver.services.ProxyService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ public class ProxyController {
                 .body(response.getData());
     }
 
-    @GetMapping("/clear")
+    @DeleteMapping("/clear")
     public ResponseEntity<Void> clearCache() {
         proxyService.clearCache();
         return ResponseEntity.noContent().build();
